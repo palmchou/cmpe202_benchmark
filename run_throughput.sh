@@ -9,10 +9,20 @@ then
   echo "       --machine_readable  # for csv outputs"
 exit 1
 fi
+# set default X_LIST if not exist
+if [ -z "$X_LIST" ]
+then
+    X_LIST="1 4 16 64 256"
+fi
+# set default N_THREAD_LIST if not exist
+if [ -z "$N_THREAD_LIST" ]
+then
+    N_THREAD_LIST="1 2 4 8"
+fi
 
-for X in 1 4 16 64 256
+for X in $X_LIST
 do
-  for n_threads in 1 2 4 8
+  for n_threads in $N_THREAD_LIST
   do
     echo "benchmarking on input size X / $X with $n_threads threads"
     if [ "$1" = "--human_readable" ]
