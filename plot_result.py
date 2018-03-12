@@ -1,7 +1,7 @@
 # coding=utf-8
 import matplotlib
 
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
@@ -128,7 +128,6 @@ def throughput_plot_all():
     for result_file in os.listdir(result_dir):
         if not result_file.startswith('throughput'):
             continue
-        file_path = os.path.join(result_dir, result_file)
         x, t = get_x_t(result_file)
         plot_for_config(x, t)
 
