@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+env
+results.tar.gz
+results/
+setup.sh
+run.sh
