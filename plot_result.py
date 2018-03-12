@@ -7,7 +7,9 @@ import numpy as np
 import scipy.stats as stats
 import csv
 from collections import defaultdict
+import os
 
+result_dir = 'results/'
 latency_result_file_path = 'results/latency_r_100.csv'
 throughput_result_prefix = 'results/throughput_'
 event_keys = ('instructions', 'cycles', 'branch-misses', 'L1-dcache-load-misses', 'LLC-load-misses',
@@ -102,6 +104,36 @@ def plot_throughput_IPC_sample(save_file):
     plt.close()
 
 
+def plot_for_config(x, t):
+    plot_event = ('IPC', 'branch_MPKL', 'L1-cache-MPKL', 'LLC-MPKL')
+    fig, ax = plt.subplots(figsize=(9, 3))
+    m = load_throughput(x, t)
+    for i, e in enumerate(plot_event):
+        ax.plot(m[..., 0], m[..., 6 + i], label=e)
+    ax.set_xlabel("time since start in seconds")
+    ax.set_title("X=%d NUM_THREADS=%d" % (x, t))
+    ax.legend()
+    plt.tight_layout()
+    plt.savefig('plots/thr_x_%d_t_%d.png' % (x, t))
+    plt.close()
+
+
+def throughput_plot_all():
+
+    def get_x_t(file_name):
+        # throughput_x_16_t_8
+        s = file_name.split('_')
+        return int(s[2]), int(s[4][0])
+
+    for result_file in os.listdir(result_dir):
+        if not result_file.startswith('throughput'):
+            continue
+        file_path = os.path.join(result_dir, result_file)
+        x, t = get_x_t(result_file)
+        plot_for_config(x, t)
+
+
 if __name__ == '__main__':
-    plot_latency('plots/latency_dist.png')
-    plot_throughput_IPC_sample('plots/throughput_single.png')
+    # plot_latency('plots/latency_dist.png')
+    # plot_throughput_IPC_sample('plots/throughput_single.png')
+    throughput_plot_all()
